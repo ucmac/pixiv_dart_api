@@ -38,12 +38,14 @@ class PixivApi {
   late final void Function(UserAccount userAccount) accountUpdater;
 
   ///兼容GetX的GetxService
-  PixivApi init(PixivAuth auth,
-      String Function() targetIPGetter,
-      String Function() languageGetter,
-      String deviceName,
-      UserAccount? Function() accountGetter,
-      void Function(UserAccount userAccount) accountUpdater,) {
+  PixivApi init({
+    required PixivAuth auth,
+    required String Function() targetIPGetter,
+    required String Function() languageGetter,
+    required String deviceName,
+    required UserAccount? Function() accountGetter,
+    required void Function(UserAccount userAccount) accountUpdater,
+  }) {
     this.auth = auth;
     this.targetIPGetter = targetIPGetter;
     this.languageGetter = languageGetter;
@@ -81,7 +83,8 @@ class PixivApi {
   }
 
   ///下一页
-  Future<T> next<T>(String url, {
+  Future<T> next<T>(
+    String url, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -115,7 +118,8 @@ class PixivApi {
   ///获取用户详细信息 <br/>
   ///如果没有查询到会返回404 : [ErrorMessage.fromJson] => <br/>
   ///[userId] - 用户ID
-  Future<UserDetail> getUserDetail(int userId, {
+  Future<UserDetail> getUserDetail(
+    int userId, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -132,7 +136,8 @@ class PixivApi {
 
   ///获取用户收藏的插画 <br/>
   ///[userId] - 用户ID <br/>
-  Future<Illusts> getUserIllustBookmarks(int userId, {
+  Future<Illusts> getUserIllustBookmarks(
+    int userId, {
     Restrict restrict = Restrict.public,
     required CancelToken cancelToken,
   }) async {
@@ -150,7 +155,8 @@ class PixivApi {
 
   ///获取用户收藏的小说 <br/>
   ///[userId] - 用户ID <br/>
-  Future<Novels> getUserNovelBookmarks(int userId, {
+  Future<Novels> getUserNovelBookmarks(
+    int userId, {
     Restrict restrict = Restrict.public,
     required CancelToken cancelToken,
   }) async {
@@ -169,10 +175,11 @@ class PixivApi {
   ///获取用户的插画 <br/>
   ///[userId] - 用户ID <br/>
   ///[type] - 类型([WorkType])
-  Future<Illusts> getUserIllusts(int userId,
-      IllustType type, {
-        required CancelToken cancelToken,
-      }) async {
+  Future<Illusts> getUserIllusts(
+    int userId,
+    IllustType type, {
+    required CancelToken cancelToken,
+  }) async {
     final response = await _httpClient.get<String>(
       '/v1/user/illusts',
       queryParameters: {
@@ -188,7 +195,8 @@ class PixivApi {
 
   ///获取用户的小说 <br/>
   ///[userId] - 用户ID <br/>
-  Future<Novels> getUserNovels(int userId, {
+  Future<Novels> getUserNovels(
+    int userId, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -204,7 +212,8 @@ class PixivApi {
 
   ///获取推荐插画 <br/>
   ///[type] - 类型([IllustType])
-  Future<Illusts> getRecommendedIllusts(IllustType type, {
+  Future<Illusts> getRecommendedIllusts(
+    IllustType type, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -236,7 +245,8 @@ class PixivApi {
 
   ///获取排行榜 <br/>
   ///[mode] - 方式([RankingMode])
-  Future<Illusts> getRanking(RankingMode mode, {
+  Future<Illusts> getRanking(
+    RankingMode mode, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -282,7 +292,8 @@ class PixivApi {
   }
 
   ///获取粉丝
-  Future<Users> getFollower(int userId, {
+  Future<Users> getFollower(
+    int userId, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -299,7 +310,8 @@ class PixivApi {
 
   ///获取关注用户 <br/>
   ///[userId] - 用户ID <br/>
-  Future<Users> getFollowingUsers(int userId, {
+  Future<Users> getFollowingUsers(
+    int userId, {
     Restrict restrict = Restrict.public,
     required CancelToken cancelToken,
   }) async {
@@ -354,7 +366,8 @@ class PixivApi {
 
   ///获取最近发布的插画 <br/>
   ///[type] - 类型([IllustType]) illust , manga
-  Future<Illusts> getNewIllusts(IllustType type, {
+  Future<Illusts> getNewIllusts(
+    IllustType type, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -383,7 +396,8 @@ class PixivApi {
 
   ///获取插画的相关推荐 <br/>
   ///[illustId] - 插画ID
-  Future<Illusts> getIllustRelated(int illustId, {
+  Future<Illusts> getIllustRelated(
+    int illustId, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -401,7 +415,8 @@ class PixivApi {
   ///获取插画详细 <br/>
   ///如果没有查询到会返回404 : [ErrorMessage.fromJson] => <br/>
   ///[illustId] - 插画ID
-  Future<IllustDetail> getIllustDetail(int illustId, {
+  Future<IllustDetail> getIllustDetail(
+    int illustId, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -419,7 +434,8 @@ class PixivApi {
 
   ///获取小说HTML页面 <br/>
   ///[novelId] - 小说ID
-  Future<String> getNovelHtml(int novelId, {
+  Future<String> getNovelHtml(
+    int novelId, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -434,7 +450,8 @@ class PixivApi {
 
   ///获取动图
   ///[illustId] 插画ID
-  Future<UgoiraMetadata> getUgoiraMetadata(int illustId, {
+  Future<UgoiraMetadata> getUgoiraMetadata(
+    int illustId, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -451,7 +468,8 @@ class PixivApi {
 
   ///获取评论的回复 <br/>
   ///[commentId] - 评论ID
-  Future<Comments> getCommentReplies(int commentId, {
+  Future<Comments> getCommentReplies(
+    int commentId, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -467,7 +485,8 @@ class PixivApi {
 
   ///获取插画的评论 <br/>
   ///[illustId] - 插画ID
-  Future<Comments> getIllustComments(int illustId, {
+  Future<Comments> getIllustComments(
+    int illustId, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -483,7 +502,8 @@ class PixivApi {
 
   ///**搜索**的**关键字**自动补全 <br/>
   ///[word] - 关键字
-  Future<SearchAutocomplete> searchAutocomplete(String word, {
+  Future<SearchAutocomplete> searchAutocomplete(
+    String word, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -505,14 +525,15 @@ class PixivApi {
   ///[startDate] - 开始时间(必须跟[endDate]一起填) <br/>
   ///[endDate] - 结束时间(必须跟[startDate]一起填) <br/>
   ///[bookmarkTotal] - 收藏数量 100, 250, 500, 1000, 5000, 7500 , 10000, 20000, 30000, 50000
-  Future<SearchIllust> searchIllust(String word,
-      SearchSort sort,
-      SearchTarget target, {
-        String? startDate,
-        String? endDate,
-        int? bookmarkTotal,
-        required CancelToken cancelToken,
-      }) async {
+  Future<SearchIllust> searchIllust(
+    String word,
+    SearchSort sort,
+    SearchTarget target, {
+    String? startDate,
+    String? endDate,
+    int? bookmarkTotal,
+    required CancelToken cancelToken,
+  }) async {
     final response = await _httpClient.get<String>(
       '/v1/search/illust',
       queryParameters: {
@@ -524,8 +545,7 @@ class PixivApi {
         'search_target': target.toPixivStringParameter(),
         'start_date': startDate,
         'end_date': endDate,
-      }
-        ..removeWhere((key, value) => null == value),
+      }..removeWhere((key, value) => null == value),
       cancelToken: cancelToken,
     );
     final data = SearchIllust.fromJson(jsonDecode(response.data!));
@@ -539,14 +559,15 @@ class PixivApi {
   ///[startDate] - 开始时间(必须跟[endDate]一起填) <br/>
   ///[endDate] - 结束时间(必须跟[startDate]一起填) <br/>
   ///[bookmarkTotal] - 收藏数量 100, 250, 500, 1000, 5000, 7500, 10000, 20000, 30000, 50000
-  Future<SearchNovel> searchNovel(String word,
-      SearchSort sort,
-      SearchTarget target, {
-        String? startDate,
-        String? endDate,
-        int? bookmarkTotal,
-        required CancelToken cancelToken,
-      }) async {
+  Future<SearchNovel> searchNovel(
+    String word,
+    SearchSort sort,
+    SearchTarget target, {
+    String? startDate,
+    String? endDate,
+    int? bookmarkTotal,
+    required CancelToken cancelToken,
+  }) async {
     final response = await _httpClient.get<String>(
       '/v1/search/novel',
       queryParameters: {
@@ -557,8 +578,7 @@ class PixivApi {
         'search_target': target.toPixivStringParameter(),
         'start_date': startDate,
         'end_date': endDate,
-      }
-        ..removeWhere((key, value) => null == value),
+      }..removeWhere((key, value) => null == value),
       cancelToken: cancelToken,
     );
     final data = SearchNovel.fromJson(jsonDecode(response.data!));
@@ -567,7 +587,8 @@ class PixivApi {
 
   ///搜索用户
   ///[word] - 关键字
-  Future<Users> searchUsers(String word, {
+  Future<Users> searchUsers(
+    String word, {
     required CancelToken cancelToken,
   }) async {
     final response = await _httpClient.get<String>(
@@ -585,7 +606,8 @@ class PixivApi {
   ///获取收藏标签
   ///[userId] - 用户ID
   ///[isNovel] - 小说
-  Future<BookmarkTags> getBookmarkTags(int userId, {
+  Future<BookmarkTags> getBookmarkTags(
+    int userId, {
     Restrict restrict = Restrict.public,
     bool isNovel = false,
     required CancelToken cancelToken,
@@ -622,7 +644,8 @@ class PixivApi {
   ///取消收藏作品 <br/>
   ///[id] - 作品ID <br/>
   ///[isNovel] 小说
-  Future<void> deleteBookmark(int id, {
+  Future<void> deleteBookmark(
+    int id, {
     bool isNovel = false,
   }) async {
     await _httpClient.post<String>(
@@ -638,7 +661,8 @@ class PixivApi {
   ///关注用户 <br/>
   ///[userId] - 用户ID <br/>
   ///[restrict] 为ture获取公开的(public) 反之不公开(private)
-  Future<void> addFollow(int userId, {
+  Future<void> addFollow(
+    int userId, {
     Restrict restrict = Restrict.public,
   }) async {
     await _httpClient.post<String>(
@@ -670,7 +694,8 @@ class PixivApi {
   ///[comment] - 评论内容 <br/>
   ///[stampId] - 表情包ID <br/>
   ///[parentCommentId] - 父评论ID(用来回复)
-  Future<Comment> addComment(int illustId, {
+  Future<Comment> addComment(
+    int illustId, {
     String comment = '',
     int? stampId,
     int? parentCommentId,
@@ -683,8 +708,7 @@ class PixivApi {
           'comment': comment,
           'stamp_id': stampId,
           'parent_comment_id': parentCommentId,
-        }
-          ..removeWhere((key, value) => null == value),
+        }..removeWhere((key, value) => null == value),
       ),
     );
     final data = Comment.fromJson(jsonDecode(response.data!)['comment']);

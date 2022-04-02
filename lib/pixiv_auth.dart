@@ -19,11 +19,11 @@ class PixivAuth {
   late final String deviceName;
 
   ///兼容GetX的GetxService
-  PixivAuth init(
-    String Function() targetIPGetter,
-    String Function() languageGetter,
-    String deviceName,
-  ) {
+  PixivAuth init({
+    required String Function() targetIPGetter,
+    required String Function() languageGetter,
+    required String deviceName,
+  }) {
     this.targetIPGetter = targetIPGetter;
     this.languageGetter = languageGetter;
     this.deviceName = deviceName;
