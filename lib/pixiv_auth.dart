@@ -8,10 +8,12 @@
 
 import 'dart:convert';
 import 'dart:math';
+
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'dto/user_account.dart';
+
 import 'interceptors/retry_interceptor.dart';
+import 'vo/user_account_result.dart';
 
 class PixivAuth {
   late final String Function() targetIPGetter;
@@ -62,7 +64,7 @@ class PixivAuth {
   static const _clientSecret = 'lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj';
 
   ///刷新token
-  Future<UserAccount> refreshAuthToken(String refreshToken) async {
+  Future<UserAccountResult> refreshAuthToken(String refreshToken) async {
     final response = await _httpClient.post<String>('/auth/token', data: {
       'client_id': _clientId,
       'client_secret': _clientSecret,
@@ -70,11 +72,11 @@ class PixivAuth {
       'grant_type': 'refresh_token',
       'refresh_token': refreshToken,
     });
-    return UserAccount.fromJson(jsonDecode(response.data!));
+    return UserAccountResult.fromJson(jsonDecode(response.data!));
   }
 
   ///初始化token
-  Future<UserAccount> initAccountAuthToken(String code, String codeVerifier) async {
+  Future<UserAccountResult> initAccountAuthToken(String code, String codeVerifier) async {
     final response = await _httpClient.post<String>(
       '/auth/token',
       data: {
@@ -89,7 +91,7 @@ class PixivAuth {
       options: Options(contentType: Headers.formUrlEncodedContentType),
     );
 
-    return UserAccount.fromJson(jsonDecode(response.data!));
+    return UserAccountResult.fromJson(jsonDecode(response.data!));
   }
 
   static const String _randomKeySet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';

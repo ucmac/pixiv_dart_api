@@ -1,6 +1,6 @@
 name: pixiv_dart_api
 description: Pixiv Dart API
-version: 1.0.1
+version: 2.0.0
 homepage: https://pixiv.xiaocao.site/#/pixiv-api/dart
 repository: https://github.com/xiao-cao-x/pixiv_dart_api
 
@@ -8,9 +8,9 @@ environment:
   sdk: ">=2.16.2 <3.0.0"
 
 dependencies:
-  dio: ^4.0.4
+  dio: ^4.0.6
   json_annotation: ^4.4.0
   crypto: ^3.0.1
 dev_dependencies:
   json_serializable: ^6.1.4
-  build_runner: ^2.1.7
+  build_runner: ^2.1.10

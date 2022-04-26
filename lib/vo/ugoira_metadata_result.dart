@@ -1,17 +1,17 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'ugoira_metadata.g.dart';
+part 'ugoira_metadata_result.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class UgoiraMetadata {
+class UgoiraMetadataResult {
   @JsonKey(name: 'ugoira_metadata')
   UgoiraMetadataContent ugoiraMetadata;
 
-  UgoiraMetadata(this.ugoiraMetadata);
+  UgoiraMetadataResult(this.ugoiraMetadata);
 
-  factory UgoiraMetadata.fromJson(Map<String, dynamic> json) => _$UgoiraMetadataFromJson(json);
+  factory UgoiraMetadataResult.fromJson(Map<String, dynamic> json) => _$UgoiraMetadataResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UgoiraMetadataToJson(this);
+  Map<String, dynamic> toJson() => _$UgoiraMetadataResultToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)

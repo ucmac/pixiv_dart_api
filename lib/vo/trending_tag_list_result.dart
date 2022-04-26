@@ -1,19 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../entity/illust.dart';
+import '../model/illust.dart';
 
-part 'trending_tags.g.dart';
+part 'trending_tag_list_result.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class TrendingTags {
+class TrendingTagListResult {
   @JsonKey(name: 'trend_tags')
   List<TrendTag> trendTags;
 
-  TrendingTags(this.trendTags);
+  TrendingTagListResult(this.trendTags);
 
-  factory TrendingTags.fromJson(Map<String, dynamic> json) => _$TrendingTagsFromJson(json);
+  factory TrendingTagListResult.fromJson(Map<String, dynamic> json) => _$TrendingTagListResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TrendingTagsToJson(this);
+  Map<String, dynamic> toJson() => _$TrendingTagListResultToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)

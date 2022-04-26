@@ -1,11 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../entity/local_user.dart';
+import '../model/local_user.dart';
 
-part 'user_account.g.dart';
+part 'user_account_result.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class UserAccount {
+class UserAccountResult {
   @JsonKey(name: 'access_token')
   String accessToken;
   @JsonKey(name: 'expires_in')
@@ -17,7 +17,7 @@ class UserAccount {
   String refreshToken;
   LocalUser user;
 
-  UserAccount(
+  UserAccountResult(
     this.accessToken,
     this.expiresIn,
     this.tokenType,
@@ -26,9 +26,9 @@ class UserAccount {
     this.user,
   );
 
-  factory UserAccount.fromJson(Map<String, dynamic> json) => _$UserAccountFromJson(json);
+  factory UserAccountResult.fromJson(Map<String, dynamic> json) => _$UserAccountResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserAccountToJson(this);
+  Map<String, dynamic> toJson() => _$UserAccountResultToJson(this);
 
   @override
   String toString() {

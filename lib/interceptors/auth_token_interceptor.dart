@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 
-import '../dto/error_message.dart';
-import '../dto/user_account.dart';
 import '../pixiv_auth.dart';
+import '../vo/error_message.dart';
+import '../vo/user_account_result.dart';
 
 class AuthTokenInterceptor extends QueuedInterceptorsWrapper {
   final Dio httpClient;
   final PixivAuth auth;
 
-  final UserAccount? Function() accountGetter;
+  final UserAccountResult? Function() accountGetter;
 
-  final void Function(UserAccount userAccount) accountUpdater;
+  final void Function(UserAccountResult userAccount) accountUpdater;
 
   AuthTokenInterceptor(this.httpClient, this.auth, this.accountGetter, this.accountUpdater);
 
