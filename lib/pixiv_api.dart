@@ -9,18 +9,19 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:pixiv_dart_api/vo/comment_add_result.dart';
 
 import 'enums.dart';
 import 'interceptors/auth_token_interceptor.dart';
 import 'interceptors/retry_interceptor.dart';
 import 'pixiv_auth.dart';
 import 'vo/bookmark_tag_page_result.dart';
+import 'vo/comment_add_result.dart';
 import 'vo/comment_page_result.dart';
 import 'vo/error_message.dart';
 import 'vo/illust_detail_result.dart';
 import 'vo/illust_page_result.dart';
 import 'vo/novel_page_result.dart';
+import 'vo/page_list.dart';
 import 'vo/search_autocomplete_result.dart';
 import 'vo/search_illust_page_result.dart';
 import 'vo/search_novel_page_result.dart';
@@ -84,7 +85,7 @@ class PixivApi {
   }
 
   ///下一页
-  Future<T> getNextPageList<T>(
+  Future<T> getNextPage<T extends IPageList>(
     String url, {
     required CancelToken cancelToken,
   }) async {
@@ -634,7 +635,6 @@ class PixivApi {
     List<String> tags = const [],
     Restrict restrict = Restrict.public,
     bool isNovel = false,
-    required CancelToken cancelToken,
   }) async {
     return _httpClient
         .post<String>(
@@ -646,7 +646,6 @@ class PixivApi {
               'tags': tags,
             },
           ),
-          cancelToken: cancelToken,
         )
         .then((response) => response.data!);
   }
@@ -657,7 +656,6 @@ class PixivApi {
   Future<String> postBookmarkDelete(
     int id, {
     bool isNovel = false,
-    required CancelToken cancelToken,
   }) async {
     return _httpClient
         .post<String>(
@@ -667,7 +665,6 @@ class PixivApi {
               '${isNovel ? 'novel' : 'illust'}_id': id,
             },
           ),
-          cancelToken: cancelToken,
         )
         .then((response) => response.data!);
   }
@@ -678,7 +675,6 @@ class PixivApi {
   Future<String> postFollowAdd(
     int userId, {
     Restrict restrict = Restrict.public,
-    required CancelToken cancelToken,
   }) async {
     return _httpClient
         .post<String>(
@@ -689,7 +685,6 @@ class PixivApi {
               'restrict': restrict.toPixivStringParameter(),
             },
           ),
-          cancelToken: cancelToken,
         )
         .then((response) => response.data!);
   }
@@ -697,9 +692,7 @@ class PixivApi {
   ///取消关注用户 <br/>
   ///[userId] - 用户ID
   Future<String> postFollowDelete(
-    int userId, {
-    required CancelToken cancelToken,
-  }) async {
+    int userId) async {
     return _httpClient
         .post<String>(
           '/v1/user/follow/delete',
@@ -708,7 +701,6 @@ class PixivApi {
               'user_id': userId,
             },
           ),
-          cancelToken: cancelToken,
         )
         .then((response) => response.data!);
   }
@@ -723,7 +715,6 @@ class PixivApi {
     String comment = '',
     int? stampId,
     int? parentCommentId,
-    required CancelToken cancelToken,
   }) async {
     return _httpClient
         .post<String>(
@@ -736,17 +727,13 @@ class PixivApi {
               'parent_comment_id': parentCommentId,
             }..removeWhere((key, value) => null == value),
           ),
-          cancelToken: cancelToken,
         )
         .then((response) => CommentAddResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///删除评论(自己的) <br/>
   ///[commentId] - 评论ID
-  Future<String> postCommentDelete(
-    int commentId, {
-    required CancelToken cancelToken,
-  }) async {
+  Future<String> postCommentDelete(int commentId) async {
     return _httpClient
         .post<String>(
           '/v1/illust/comment/delete',
@@ -755,7 +742,6 @@ class PixivApi {
               'comment_id': commentId,
             },
           ),
-          cancelToken: cancelToken,
         )
         .then((response) => response.data!);
   }
