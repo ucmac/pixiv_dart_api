@@ -1,0 +1,2 @@
+$env:HTTP_PROXY="http://127.0.0.1:44001"
+flutter packages pub publish --server=https://pub.dartlang.org
