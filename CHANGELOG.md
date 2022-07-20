@@ -26,3 +26,7 @@
 ## 2.0.4
 
 codeVerifier codeChallenge提前生成
+
+## 2.0.5
+
+initAccountAuthToken 去除codeVerifier参数

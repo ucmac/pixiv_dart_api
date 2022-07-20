@@ -73,7 +73,7 @@ class PixivAuth {
   }
 
   ///初始化token
-  Future<UserAccountResult> initAccountAuthToken(String code, String codeVerifier) async {
+  Future<UserAccountResult> initAccountAuthToken(String code) async {
     final response = await _httpClient.post<String>(
       '/auth/token',
       data: {
