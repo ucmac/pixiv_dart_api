@@ -1,11 +1,3 @@
-/*
- * Copyright (C) 2021. by xiao-cao-x, All rights reserved
- * 项目名称:pixiv_func_mobile
- * 文件名称:pixiv_api.dart
- * 创建时间:2021/8/21 下午12:47
- * 作者:小草
- */
-
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -691,8 +683,7 @@ class PixivApi {
 
   ///取消关注用户 <br/>
   ///[userId] - 用户ID
-  Future<String> postFollowDelete(
-    int userId) async {
+  Future<String> postFollowDelete(int userId) async {
     return _httpClient
         .post<String>(
           '/v1/user/follow/delete',

@@ -1,11 +1,3 @@
-/*
- * Copyright (C) 2021. by xiao-cao-x, All rights reserved
- * 项目名称:pixiv_func_mobile
- * 文件名称:pixiv_auth.dart
- * 创建时间:2021/8/21 下午3:42
- * 作者:小草
- */
-
 import 'dart:convert';
 import 'dart:math';
 
@@ -29,8 +21,13 @@ class PixivAuth {
     this.targetIPGetter = targetIPGetter;
     this.languageGetter = languageGetter;
     this.deviceName = deviceName;
+    codeVerifier = List.generate(128, (i) => _randomKeySet[Random.secure().nextInt(_randomKeySet.length)]).join();
+    codeChallenge = base64Url.encode(sha256.convert(ascii.encode(codeVerifier)).bytes).replaceAll('=', '');
     return this;
   }
+
+  late final String codeVerifier;
+  late final String codeChallenge;
 
   Dio get _httpClient {
     final dio = Dio(
@@ -95,12 +92,4 @@ class PixivAuth {
   }
 
   static const String _randomKeySet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-
-  String randomString(int length) {
-    return List.generate(length, (i) => _randomKeySet[Random.secure().nextInt(_randomKeySet.length)]).join();
-  }
-
-  String generateCodeChallenge(String s) {
-    return base64Url.encode(sha256.convert(ascii.encode(s)).bytes).replaceAll('=', '');
-  }
 }
