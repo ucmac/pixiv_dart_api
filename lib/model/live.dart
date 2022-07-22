@@ -8,7 +8,7 @@ part 'live.g.dart';
 class Live {
   String id;
   @JsonKey(name: 'create_at')
-  String createAt;
+  String? createAt;
   NestedUser owner;
   List<NestedUser> performers;
   String name;
@@ -24,7 +24,7 @@ class Live {
   bool isR18;
   String publicity;
   @JsonKey(name: 'is_closed')
-  bool isClosed;
+  bool? isClosed;
   //screencast webcam
   String mode;
   String server;

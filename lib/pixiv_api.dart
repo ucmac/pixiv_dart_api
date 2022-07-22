@@ -110,7 +110,7 @@ class PixivApi {
   }) async {
     return _httpClient
         .get<String>(
-          'https://${targetIPGetter.call()}v1/live/list',
+          'https://${targetIPGetter.call()}/v1/live/list',
           queryParameters: {
             'list_type': 'popular',
           },
@@ -125,7 +125,7 @@ class PixivApi {
     required CancelToken cancelToken,
   }) async {
     return _httpClient
-        .get<String>('https://${targetIPGetter.call()}GET /api/lives/$id.json',
+        .get<String>('https://${targetIPGetter.call()}/api/lives/$id.json',
             cancelToken: cancelToken, options: Options(headers: {'Host': 'sketch.pixiv.net'}))
         .then((response) => LiveDetailResult.fromJson(jsonDecode(response.data!)));
   }

@@ -8,7 +8,7 @@ part of 'live.dart';
 
 Live _$LiveFromJson(Map<String, dynamic> json) => Live(
       json['id'] as String,
-      json['create_at'] as String,
+      json['create_at'] as String?,
       NestedUser.fromJson(json['owner'] as Map<String, dynamic>),
       (json['performers'] as List<dynamic>)
           .map((e) => NestedUser.fromJson(e as Map<String, dynamic>))
@@ -19,7 +19,7 @@ Live _$LiveFromJson(Map<String, dynamic> json) => Live(
       json['is_r15'] as bool,
       json['is_r18'] as bool,
       json['publicity'] as String,
-      json['is_closed'] as bool,
+      json['is_closed'] as bool?,
       json['mode'] as String,
       json['server'] as String,
       json['channel_id'] as String,
