@@ -36,3 +36,6 @@ initAccountAuthToken 去除codeVerifier参数
 
 ## 2.1.1
 修bug
+
+## 2.1.2
+修bug
