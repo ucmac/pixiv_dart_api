@@ -125,7 +125,7 @@ class PixivApi {
     required CancelToken cancelToken,
   }) async {
     return _httpClient
-        .get<String>('https://210.140.92.212/api/lives/$id.json',
+        .get<String>('https://210.140.170.179/api/lives/$id.json',
             cancelToken: cancelToken, options: Options(headers: {'Host': 'sketch.pixiv.net'}))
         .then((response) => LiveDetailResult.fromJson(jsonDecode(response.data!)));
   }
