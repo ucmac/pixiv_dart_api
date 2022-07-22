@@ -6,7 +6,8 @@ part of 'user_account_result.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserAccountResult _$UserAccountResultFromJson(Map<String, dynamic> json) => UserAccountResult(
+UserAccountResult _$UserAccountResultFromJson(Map<String, dynamic> json) =>
+    UserAccountResult(
       json['access_token'] as String,
       json['expires_in'] as int,
       json['token_type'] as String,
@@ -15,7 +16,8 @@ UserAccountResult _$UserAccountResultFromJson(Map<String, dynamic> json) => User
       LocalUser.fromJson(json['user'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$UserAccountResultToJson(UserAccountResult instance) => <String, dynamic>{
+Map<String, dynamic> _$UserAccountResultToJson(UserAccountResult instance) =>
+    <String, dynamic>{
       'access_token': instance.accessToken,
       'expires_in': instance.expiresIn,
       'token_type': instance.tokenType,

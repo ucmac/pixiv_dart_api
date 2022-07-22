@@ -11,7 +11,8 @@ BookmarkTag _$BookmarkTagFromJson(Map<String, dynamic> json) => BookmarkTag(
       json['count'] as int,
     );
 
-Map<String, dynamic> _$BookmarkTagToJson(BookmarkTag instance) => <String, dynamic>{
+Map<String, dynamic> _$BookmarkTagToJson(BookmarkTag instance) =>
+    <String, dynamic>{
       'name': instance.name,
       'count': instance.count,
     };

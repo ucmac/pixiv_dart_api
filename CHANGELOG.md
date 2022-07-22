@@ -30,3 +30,6 @@ codeVerifier codeChallenge提前生成
 ## 2.0.5
 
 initAccountAuthToken 去除codeVerifier参数
+
+## 2.0.6
+直播数据

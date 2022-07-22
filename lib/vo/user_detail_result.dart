@@ -47,6 +47,7 @@ class UserInfo {
 @JsonSerializable(explicitToJson: true)
 class UserProfile {
   String? webpage;
+  //性别
   String gender;
 
   ///出生

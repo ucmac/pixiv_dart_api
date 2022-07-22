@@ -6,11 +6,17 @@ part of 'trending_tag_list_result.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TrendingTagListResult _$TrendingTagListResultFromJson(Map<String, dynamic> json) => TrendingTagListResult(
-      (json['trend_tags'] as List<dynamic>).map((e) => TrendTag.fromJson(e as Map<String, dynamic>)).toList(),
+TrendingTagListResult _$TrendingTagListResultFromJson(
+        Map<String, dynamic> json) =>
+    TrendingTagListResult(
+      (json['trend_tags'] as List<dynamic>)
+          .map((e) => TrendTag.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
-Map<String, dynamic> _$TrendingTagListResultToJson(TrendingTagListResult instance) => <String, dynamic>{
+Map<String, dynamic> _$TrendingTagListResultToJson(
+        TrendingTagListResult instance) =>
+    <String, dynamic>{
       'trend_tags': instance.trendTags.map((e) => e.toJson()).toList(),
     };
 

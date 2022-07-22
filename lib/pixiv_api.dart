@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:pixiv_dart_api/vo/live_detail_result.dart';
+import 'package:pixiv_dart_api/vo/live_page_result.dart';
 
 import 'enums.dart';
 import 'interceptors/auth_token_interceptor.dart';
@@ -55,10 +57,10 @@ class PixivApi {
         baseUrl: 'https://${targetIPGetter.call()}',
         responseType: ResponseType.plain,
         headers: {
-          'User-Agent': 'PixivAndroidApp/6.21.1 (Android 11.0; $deviceName)',
+          'User-Agent': 'PixivAndroidApp/6.54.0 (Android 11.0; $deviceName)',
           'App-OS': 'android',
           'App-OS-Version': '11.0',
-          'App-Version': '6.21.1',
+          'App-Version': '6.54.0',
           'Accept-Language': languageGetter.call(),
           'Host': "app-api.pixiv.net"
         },
@@ -81,33 +83,51 @@ class PixivApi {
     String url, {
     required CancelToken cancelToken,
   }) async {
-    return _httpClient
-        .get<String>(
-      url.replaceFirst("app-api.pixiv.net", targetIPGetter.call()),
-      cancelToken: cancelToken,
-    )
-        .then((response) {
+    return _httpClient.get<String>(url.replaceFirst("app-api.pixiv.net", targetIPGetter.call()), cancelToken: cancelToken).then((response) {
       final responseData = response.data!;
       if (T == CommentPageResult) {
         return CommentPageResult.fromJson(jsonDecode(responseData)) as T;
-      }
-      if (T == IllustPageResult) {
+      } else if (T == IllustPageResult) {
         return IllustPageResult.fromJson(jsonDecode(responseData)) as T;
-      }
-      if (T == NovelPageResult) {
+      } else if (T == NovelPageResult) {
         return NovelPageResult.fromJson(jsonDecode(responseData)) as T;
-      }
-      if (T == UserPageResult) {
+      } else if (T == UserPageResult) {
         return UserPageResult.fromJson(jsonDecode(responseData)) as T;
-      }
-      if (T == SearchIllustPageResult) {
+      } else if (T == SearchIllustPageResult) {
         return SearchIllustPageResult.fromJson(jsonDecode(responseData)) as T;
-      }
-      if (T == BookmarkTagPageResult) {
+      } else if (T == BookmarkTagPageResult) {
         return BookmarkTagPageResult.fromJson(jsonDecode(responseData)) as T;
+      } else if (T == LivePageResult) {
+        return LivePageResult.fromJson(jsonDecode(responseData)) as T;
       }
       throw Exception('类型错误');
     });
+  }
+
+  ///获取直播列表
+  Future<LivePageResult> getLivePage({
+    required CancelToken cancelToken,
+  }) async {
+    return _httpClient
+        .get<String>(
+          'https://${targetIPGetter.call()}v1/live/list',
+          queryParameters: {
+            'list_type': 'popular',
+          },
+          cancelToken: cancelToken,
+        )
+        .then((response) => LivePageResult.fromJson(jsonDecode(response.data!)));
+  }
+
+  ///获取直播详情
+  Future<LiveDetailResult> getLiveDetail(
+    String id, {
+    required CancelToken cancelToken,
+  }) async {
+    return _httpClient
+        .get<String>('https://${targetIPGetter.call()}GET /api/lives/$id.json',
+            cancelToken: cancelToken, options: Options(headers: {'Host': 'sketch.pixiv.net'}))
+        .then((response) => LiveDetailResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取用户详细信息 <br/>
