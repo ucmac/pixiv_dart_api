@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../model/profile_image_urls.dart';
+import '../model/profile.dart';
 
 part 'user_detail_result.g.dart';
 

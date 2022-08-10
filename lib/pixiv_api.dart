@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:pixiv_dart_api/model/profile.dart';
 import 'package:pixiv_dart_api/vo/live_detail_result.dart';
 import 'package:pixiv_dart_api/vo/live_page_result.dart';
 
@@ -16,6 +18,7 @@ import 'vo/illust_detail_result.dart';
 import 'vo/illust_page_result.dart';
 import 'vo/novel_page_result.dart';
 import 'vo/page_list.dart';
+import 'vo/profile_presets_result.dart';
 import 'vo/search_autocomplete_result.dart';
 import 'vo/search_illust_page_result.dart';
 import 'vo/search_novel_page_result.dart';
@@ -79,10 +82,9 @@ class PixivApi {
   }
 
   ///下一页
-  Future<T> getNextPage<T extends IPageList>(
-    String url, {
+  Future<T> getNextPage<T extends IPageList>(String url, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient.get<String>(url.replaceFirst("app-api.pixiv.net", targetIPGetter.call()), cancelToken: cancelToken).then((response) {
       final responseData = response.data!;
       if (T == CommentPageResult) {
@@ -107,239 +109,228 @@ class PixivApi {
   ///获取直播列表
   Future<LivePageResult> getLivePage({
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          'https://${targetIPGetter.call()}/v1/live/list',
-          queryParameters: {
-            'list_type': 'popular',
-          },
-          cancelToken: cancelToken,
-        )
+      'https://${targetIPGetter.call()}/v1/live/list',
+      queryParameters: {
+        'list_type': 'popular',
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => LivePageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取直播详情
-  Future<LiveDetailResult> getLiveDetail(
-    String id, {
+  Future<LiveDetailResult> getLiveDetail(String id, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
-        .get<String>('https://210.140.170.179/api/lives/$id.json',
-            cancelToken: cancelToken, options: Options(headers: {'Host': 'sketch.pixiv.net'}))
+        .get<String>('https://210.140.170.179/api/lives/$id.json', cancelToken: cancelToken, options: Options(headers: {'Host': 'sketch.pixiv.net'}))
         .then((response) => LiveDetailResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取用户详细信息 <br/>
   ///如果没有查询到会返回404 : [ErrorMessage.fromJson] => <br/>
   ///[userId] - 用户ID
-  Future<UserDetailResult> getUserDetail(
-    int userId, {
+  Future<UserDetailResult> getUserDetail(int userId, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/user/detail',
-          queryParameters: {
-            'filter': 'for_android',
-            'user_id': userId,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/user/detail',
+      queryParameters: {
+        'filter': 'for_android',
+        'user_id': userId,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => UserDetailResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取用户收藏的插画 <br/>
   ///[userId] - 用户ID <br/>
-  Future<IllustPageResult> getUserIllustBookmarkPage(
-    int userId, {
+  Future<IllustPageResult> getUserIllustBookmarkPage(int userId, {
     Restrict restrict = Restrict.public,
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/user/bookmarks/illust',
-          queryParameters: {
-            'user_id': userId,
-            'restrict': restrict.toPixivStringParameter(),
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/user/bookmarks/illust',
+      queryParameters: {
+        'user_id': userId,
+        'restrict': restrict.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => IllustPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取用户收藏的小说 <br/>
   ///[userId] - 用户ID <br/>
-  Future<NovelPageResult> getUserNovelBookmarkPage(
-    int userId, {
+  Future<NovelPageResult> getUserNovelBookmarkPage(int userId, {
     Restrict restrict = Restrict.public,
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/user/bookmarks/novel',
-          queryParameters: {
-            'user_id': userId,
-            'restrict': restrict.toPixivStringParameter(),
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/user/bookmarks/novel',
+      queryParameters: {
+        'user_id': userId,
+        'restrict': restrict.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => NovelPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取用户的插画 <br/>
   ///[userId] - 用户ID <br/>
   ///[type] - 类型([WorkType])
-  Future<IllustPageResult> getUserIllustPage(
-    int userId,
-    IllustType type, {
-    required CancelToken cancelToken,
-  }) async {
+  Future<IllustPageResult> getUserIllustPage(int userId,
+      IllustType type, {
+        required CancelToken cancelToken,
+      }) {
     return _httpClient
         .get<String>(
-          '/v1/user/illusts',
-          queryParameters: {
-            'filter': 'for_android',
-            'user_id': userId,
-            'type': type.toPixivStringParameter(),
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/user/illusts',
+      queryParameters: {
+        'filter': 'for_android',
+        'user_id': userId,
+        'type': type.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => IllustPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取用户的小说 <br/>
   ///[userId] - 用户ID <br/>
-  Future<NovelPageResult> getUserNovelPage(
-    int userId, {
+  Future<NovelPageResult> getUserNovelPage(int userId, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/user/novels',
-          queryParameters: {
-            'user_id': userId,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/user/novels',
+      queryParameters: {
+        'user_id': userId,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => NovelPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取推荐插画 <br/>
   ///[type] - 类型([IllustType])
-  Future<IllustPageResult> getRecommendedIllustPage(
-    IllustType type, {
+  Future<IllustPageResult> getRecommendedIllustPage(IllustType type, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/${type.toPixivStringParameter()}/recommended',
-          queryParameters: {
-            'filter': 'for_android',
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/${type.toPixivStringParameter()}/recommended',
+      queryParameters: {
+        'filter': 'for_android',
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => IllustPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取推荐小说
   Future<NovelPageResult> getRecommendedNovelPage({
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/novel/recommended',
-          queryParameters: {
-            'include_ranking_novels': false,
-            'include_privacy_policy': false,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/novel/recommended',
+      queryParameters: {
+        'include_ranking_novels': false,
+        'include_privacy_policy': false,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => NovelPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取排行榜 <br/>
   ///[mode] - 方式([RankingMode])
-  Future<IllustPageResult> getRankingPage(
-    RankingMode mode, {
+  Future<IllustPageResult> getRankingPage(RankingMode mode, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/illust/ranking',
-          queryParameters: {
-            'filter': 'for_android',
-            'mode': mode.toPixivStringParameter(),
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/illust/ranking',
+      queryParameters: {
+        'filter': 'for_android',
+        'mode': mode.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => IllustPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取推荐标签(搜索用的)
   Future<TrendingTagListResult> getTrendingTagList({
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/trending-tags/illust',
-          queryParameters: {
-            'filter': 'for_android',
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/trending-tags/illust',
+      queryParameters: {
+        'filter': 'for_android',
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => TrendingTagListResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取推荐用户
   Future<UserPageResult> getRecommendedUserPage({
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/user/recommended',
-          queryParameters: {
-            'filter': 'for_android',
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/user/recommended',
+      queryParameters: {
+        'filter': 'for_android',
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => UserPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取粉丝
-  Future<UserPageResult> getFollowerPage(
-    int userId, {
+  Future<UserPageResult> getFollowerPage(int userId, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/user/follower',
-          queryParameters: {
-            'filter': 'for_android',
-            'user_id': userId,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/user/follower',
+      queryParameters: {
+        'filter': 'for_android',
+        'user_id': userId,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => UserPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取关注用户 <br/>
   ///[userId] - 用户ID <br/>
-  Future<UserPageResult> getFollowingUserPage(
-    int userId, {
+  Future<UserPageResult> getFollowingUserPage(int userId, {
     Restrict restrict = Restrict.public,
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/user/following',
-          queryParameters: {
-            'filter': 'for_android',
-            'user_id': userId,
-            'restrict': restrict.toPixivStringParameter(),
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/user/following',
+      queryParameters: {
+        'filter': 'for_android',
+        'user_id': userId,
+        'restrict': restrict.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => UserPageResult.fromJson(jsonDecode(response.data!)));
   }
 
@@ -348,16 +339,16 @@ class PixivApi {
   Future<IllustPageResult> getFollowNewIllustPage({
     required Restrict? restrict,
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v2/illust/follow',
-          queryParameters: {
-            'filter': 'for_android',
-            'restrict': null == restrict ? 'all' : restrict.toPixivStringParameter(),
-          },
-          cancelToken: cancelToken,
-        )
+      '/v2/illust/follow',
+      queryParameters: {
+        'filter': 'for_android',
+        'restrict': null == restrict ? 'all' : restrict.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => IllustPageResult.fromJson(jsonDecode(response.data!)));
   }
 
@@ -366,275 +357,265 @@ class PixivApi {
   Future<NovelPageResult> getFollowNewNovelPage({
     required Restrict? restrict,
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/novel/follow',
-          queryParameters: {
-            'filter': 'for_android',
-            'restrict': null == restrict ? 'all' : restrict.toPixivStringParameter(),
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/novel/follow',
+      queryParameters: {
+        'filter': 'for_android',
+        'restrict': null == restrict ? 'all' : restrict.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => NovelPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取最近发布的插画 <br/>
   ///[type] - 类型([IllustType])
-  Future<IllustPageResult> getNewIllustPage(
-    IllustType type, {
+  Future<IllustPageResult> getNewIllustPage(IllustType type, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/illust/new',
-          queryParameters: {
-            'filter': 'for_android',
-            'content_type': type.toPixivStringParameter(),
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/illust/new',
+      queryParameters: {
+        'filter': 'for_android',
+        'content_type': type.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => IllustPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取最近发布的小说
   Future<NovelPageResult> getNewNovelPage({
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/novel/new',
-          cancelToken: cancelToken,
-        )
+      '/v1/novel/new',
+      cancelToken: cancelToken,
+    )
         .then((response) => NovelPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取插画的相关推荐 <br/>
   ///[illustId] - 插画ID
-  Future<IllustPageResult> getIllustRelatedPage(
-    int illustId, {
+  Future<IllustPageResult> getIllustRelatedPage(int illustId, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v2/illust/related',
-          queryParameters: {
-            'filter': 'for_android',
-            'illust_id': illustId,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v2/illust/related',
+      queryParameters: {
+        'filter': 'for_android',
+        'illust_id': illustId,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => IllustPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取插画详细 <br/>
   ///如果没有查询到会返回404 : [ErrorMessage.fromJson] => <br/>
   ///[illustId] - 插画ID
-  Future<IllustDetailResult> getIllustDetail(
-    int illustId, {
+  Future<IllustDetailResult> getIllustDetail(int illustId, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/illust/detail',
-          queryParameters: {
-            'filter': 'for_android',
-            'illust_id': illustId,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/illust/detail',
+      queryParameters: {
+        'filter': 'for_android',
+        'illust_id': illustId,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => IllustDetailResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取小说HTML页面 <br/>
   ///[novelId] - 小说ID
-  Future<String> getNovelHtml(
-    int novelId, {
+  Future<String> getNovelHtml(int novelId, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/webview/v1/novel',
-          queryParameters: {
-            'id': novelId,
-          },
-          cancelToken: cancelToken,
-        )
+      '/webview/v1/novel',
+      queryParameters: {
+        'id': novelId,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => response.data!);
   }
 
   ///获取动图
   ///[illustId] 插画ID
-  Future<UgoiraMetadataResult> getUgoiraMetadata(
-    int illustId, {
+  Future<UgoiraMetadataResult> getUgoiraMetadata(int illustId, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/ugoira/metadata',
-          queryParameters: {
-            'illust_id': illustId,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/ugoira/metadata',
+      queryParameters: {
+        'illust_id': illustId,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => UgoiraMetadataResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取评论的回复 <br/>
   ///[commentId] - 评论ID
-  Future<CommentPageResult> getCommentReplyPage(
-    int commentId, {
+  Future<CommentPageResult> getCommentReplyPage(int commentId, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v2/illust/comment/replies',
-          queryParameters: {
-            'comment_id': commentId,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v2/illust/comment/replies',
+      queryParameters: {
+        'comment_id': commentId,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => CommentPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取插画的评论 <br/>
   ///[illustId] - 插画ID
-  Future<CommentPageResult> getIllustCommentPage(
-    int illustId, {
+  Future<CommentPageResult> getIllustCommentPage(int illustId, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v3/illust/comments',
-          queryParameters: {
-            'illust_id': illustId,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v3/illust/comments',
+      queryParameters: {
+        'illust_id': illustId,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => CommentPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///**搜索**的**关键字**自动补全 <br/>
   ///[word] - 关键字
-  Future<SearchAutocompleteResult> getSearchAutocomplete(
-    String word, {
+  Future<SearchAutocompleteResult> getSearchAutocomplete(String word, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v2/search/autocomplete',
-          queryParameters: {
-            'merge_plain_keyword_results': true,
-            'word': word,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v2/search/autocomplete',
+      queryParameters: {
+        'merge_plain_keyword_results': true,
+        'word': word,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => SearchAutocompleteResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///搜索 <br/>
   ///[word] - 关键字 <br/>
   ///[sort] - 排序([SearchSort]) <br/>
-  ///[target] - 搜索目标([SearchTarget]) <br/>
+  ///[target] - 搜索目标([SearchIllustTarget]) <br/>
   ///[startDate] - 开始时间(必须跟[endDate]一起填) <br/>
   ///[endDate] - 结束时间(必须跟[startDate]一起填) <br/>
   ///[bookmarkTotal] - 收藏数量 100, 250, 500, 1000, 5000, 7500 , 10000, 20000, 30000, 50000
-  Future<SearchIllustPageResult> getSearchIllustPage(
-    String word,
-    SearchSort sort,
-    SearchTarget target, {
-    String? startDate,
-    String? endDate,
-    int? bookmarkTotal,
-    required CancelToken cancelToken,
-  }) async {
+  Future<SearchIllustPageResult> getSearchIllustPage(String word,
+      SearchSort sort,
+      SearchIllustTarget target, {
+        String? startDate,
+        String? endDate,
+        int? bookmarkTotal,
+        required CancelToken cancelToken,
+      }) {
     return _httpClient
         .get<String>(
-          '/v1/search/illust',
-          queryParameters: {
-            'filter': 'for_android',
-            'include_translated_tag_results': true,
-            'merge_plain_keyword_results': true,
-            'word': null != bookmarkTotal ? '$word ${bookmarkTotal}users入り' : word,
-            'sort': sort.toPixivStringParameter(),
-            'search_target': target.toPixivStringParameter(),
-            'start_date': startDate,
-            'end_date': endDate,
-          }..removeWhere((key, value) => null == value),
-          cancelToken: cancelToken,
-        )
+      '/v1/search/illust',
+      queryParameters: {
+        'filter': 'for_android',
+        'include_translated_tag_results': true,
+        'merge_plain_keyword_results': true,
+        'word': null != bookmarkTotal ? '$word ${bookmarkTotal}users入り' : word,
+        'sort': sort.toPixivStringParameter(),
+        'search_target': target.toPixivStringParameter(),
+        'start_date': startDate,
+        'end_date': endDate,
+      }
+        ..removeWhere((key, value) => null == value),
+      cancelToken: cancelToken,
+    )
         .then((response) => SearchIllustPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///搜索 <br/>
   ///[word] - 关键字 <br/>
   ///[sort] - 排序([SearchSort]) <br/>
-  ///[target] - 搜索目标([SearchTarget]) <br/>
+  ///[target] - 搜索目标([SearchNovelTarget]) <br/>
   ///[startDate] - 开始时间(必须跟[endDate]一起填) <br/>
   ///[endDate] - 结束时间(必须跟[startDate]一起填) <br/>
   ///[bookmarkTotal] - 收藏数量 100, 250, 500, 1000, 5000, 7500, 10000, 20000, 30000, 50000
-  Future<SearchNovelPageResult> getSearchNovelPage(
-    String word,
-    SearchSort sort,
-    SearchTarget target, {
-    String? startDate,
-    String? endDate,
-    int? bookmarkTotal,
-    required CancelToken cancelToken,
-  }) async {
+  Future<SearchNovelPageResult> getSearchNovelPage(String word,
+      SearchSort sort,
+      SearchNovelTarget target, {
+        String? startDate,
+        String? endDate,
+        int? bookmarkTotal,
+        required CancelToken cancelToken,
+      }) {
     return _httpClient
         .get<String>(
-          '/v1/search/novel',
-          queryParameters: {
-            'include_translated_tag_results': true,
-            'merge_plain_keyword_results': true,
-            'word': null != bookmarkTotal ? '$word ${bookmarkTotal}users入り' : word,
-            'sort': sort.toPixivStringParameter(),
-            'search_target': target.toPixivStringParameter(),
-            'start_date': startDate,
-            'end_date': endDate,
-          }..removeWhere((key, value) => null == value),
-          cancelToken: cancelToken,
-        )
+      '/v1/search/novel',
+      queryParameters: {
+        'include_translated_tag_results': true,
+        'merge_plain_keyword_results': true,
+        'word': null != bookmarkTotal ? '$word ${bookmarkTotal}users入り' : word,
+        'sort': sort.toPixivStringParameter(),
+        'search_target': target.toPixivStringParameter(),
+        'start_date': startDate,
+        'end_date': endDate,
+      }
+        ..removeWhere((key, value) => null == value),
+      cancelToken: cancelToken,
+    )
         .then((response) => SearchNovelPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///搜索用户
   ///[word] - 关键字
-  Future<UserPageResult> getSearchUserPage(
-    String word, {
+  Future<UserPageResult> getSearchUserPage(String word, {
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/search/user',
-          queryParameters: {
-            'filter': 'for_android',
-            'word': word,
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/search/user',
+      queryParameters: {
+        'filter': 'for_android',
+        'word': word,
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => UserPageResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///获取收藏标签
   ///[userId] - 用户ID
   ///[isNovel] - 小说
-  Future<BookmarkTagPageResult> getBookmarkTagPage(
-    int userId, {
+  Future<BookmarkTagPageResult> getBookmarkTagPage(int userId, {
     Restrict restrict = Restrict.public,
     bool isNovel = false,
     required CancelToken cancelToken,
-  }) async {
+  }) {
     return _httpClient
         .get<String>(
-          '/v1/user/bookmark-tags/${isNovel ? 'novel' : 'illust'}',
-          queryParameters: {
-            'user_id': userId,
-            'restrict': restrict.toPixivStringParameter(),
-          },
-          cancelToken: cancelToken,
-        )
+      '/v1/user/bookmark-tags/${isNovel ? 'novel' : 'illust'}',
+      queryParameters: {
+        'user_id': userId,
+        'restrict': restrict.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
         .then((response) => BookmarkTagPageResult.fromJson(jsonDecode(response.data!)));
   }
 
@@ -642,77 +623,74 @@ class PixivApi {
   ///[id] - 作品ID <br/>
   ///[tags] - 标签(自己添加的) <br/>
   ///[isNovel] - 小说
-  Future<String> postBookmarkAdd(
-    int id, {
+  Future<String> postBookmarkAdd(int id, {
     List<String> tags = const [],
     Restrict restrict = Restrict.public,
     bool isNovel = false,
-  }) async {
+  }) {
     return _httpClient
         .post<String>(
-          '/v2/${isNovel ? 'novel' : 'illust'}/bookmark/add',
-          data: FormData.fromMap(
-            {
-              '${isNovel ? 'novel' : 'illust'}_id': id,
-              'restrict': restrict.toPixivStringParameter(),
-              'tags': tags,
-            },
-          ),
-        )
+      '/v2/${isNovel ? 'novel' : 'illust'}/bookmark/add',
+      data: FormData.fromMap(
+        {
+          '${isNovel ? 'novel' : 'illust'}_id': id,
+          'restrict': restrict.toPixivStringParameter(),
+          'tags': tags,
+        },
+      ),
+    )
         .then((response) => response.data!);
   }
 
   ///取消收藏作品 <br/>
   ///[id] - 作品ID <br/>
   ///[isNovel] 小说
-  Future<String> postBookmarkDelete(
-    int id, {
+  Future<String> postBookmarkDelete(int id, {
     bool isNovel = false,
-  }) async {
+  }) {
     return _httpClient
         .post<String>(
-          '/v1/${isNovel ? 'novel' : 'illust'}/bookmark/delete',
-          data: FormData.fromMap(
-            {
-              '${isNovel ? 'novel' : 'illust'}_id': id,
-            },
-          ),
-        )
+      '/v1/${isNovel ? 'novel' : 'illust'}/bookmark/delete',
+      data: FormData.fromMap(
+        {
+          '${isNovel ? 'novel' : 'illust'}_id': id,
+        },
+      ),
+    )
         .then((response) => response.data!);
   }
 
   ///关注用户 <br/>
   ///[userId] - 用户ID <br/>
   ///[restrict] 为ture获取公开的(public) 反之不公开(private)
-  Future<String> postFollowAdd(
-    int userId, {
+  Future<String> postFollowAdd(int userId, {
     Restrict restrict = Restrict.public,
-  }) async {
+  }) {
     return _httpClient
         .post<String>(
-          '/v1/user/follow/add',
-          data: FormData.fromMap(
-            {
-              'user_id': userId,
-              'restrict': restrict.toPixivStringParameter(),
-            },
-          ),
-        )
+      '/v1/user/follow/add',
+      data: FormData.fromMap(
+        {
+          'user_id': userId,
+          'restrict': restrict.toPixivStringParameter(),
+        },
+      ),
+    )
         .then((response) => response.data!);
   }
 
   ///取消关注用户 <br/>
   ///[userId] - 用户ID
-  Future<String> postFollowDelete(int userId) async {
+  Future<String> postFollowDelete(int userId) {
     return _httpClient
         .post<String>(
-          '/v1/user/follow/delete',
-          data: FormData.fromMap(
-            {
-              'user_id': userId,
-            },
-          ),
-        )
+      '/v1/user/follow/delete',
+      data: FormData.fromMap(
+        {
+          'user_id': userId,
+        },
+      ),
+    )
         .then((response) => response.data!);
   }
 
@@ -721,39 +699,142 @@ class PixivApi {
   ///[comment] - 评论内容 <br/>
   ///[stampId] - 表情包ID <br/>
   ///[parentCommentId] - 父评论ID(用来回复)
-  Future<CommentAddResult> postCommentAdd(
-    int illustId, {
+  Future<CommentAddResult> postCommentAdd(int illustId, {
     String comment = '',
     int? stampId,
     int? parentCommentId,
-  }) async {
+  }) {
     return _httpClient
         .post<String>(
-          '/v1/illust/comment/add',
-          data: FormData.fromMap(
-            {
-              'illust_id': illustId,
-              'comment': comment,
-              'stamp_id': stampId,
-              'parent_comment_id': parentCommentId,
-            }..removeWhere((key, value) => null == value),
-          ),
-        )
+      '/v1/illust/comment/add',
+      data: FormData.fromMap(
+        {
+          'illust_id': illustId,
+          'comment': comment,
+          'stamp_id': stampId,
+          'parent_comment_id': parentCommentId,
+        }
+          ..removeWhere((key, value) => null == value),
+      ),
+    )
         .then((response) => CommentAddResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///删除评论(自己的) <br/>
   ///[commentId] - 评论ID
-  Future<String> postCommentDelete(int commentId) async {
+  Future<String> postCommentDelete(int commentId) {
     return _httpClient
         .post<String>(
-          '/v1/illust/comment/delete',
-          data: FormData.fromMap(
-            {
-              'comment_id': commentId,
-            },
-          ),
-        )
+      '/v1/illust/comment/delete',
+      data: FormData.fromMap(
+        {
+          'comment_id': commentId,
+        },
+      ),
+    )
+        .then((response) => response.data!);
+  }
+
+  ///获取个人资料预设
+  Future<ProfilePresetsResult> getProfilePresets({required CancelToken cancelToken}) {
+    return _httpClient
+        .get<String>(
+      '/v1/user/profile/presets',
+      cancelToken: cancelToken,
+    )
+        .then((response) => ProfilePresetsResult.fromJson(jsonDecode(response.data!)));
+  }
+
+  ///更新个人资料
+  ///
+  /// [deleteProfileImage] 删除头像
+  ///
+  /// [userName] 用户名
+  ///
+  /// [webpage] 主页
+  ///
+  /// [twitter] 推特
+  ///
+  /// [gender] 性别
+  ///
+  /// [addressId] 地址id
+  ///
+  /// [countryCode] 国家代码
+  ///
+  /// [birthday] 生日
+  ///
+  /// [jobId] 工作id
+  ///
+  /// [comment] 自我介绍
+  ///
+  /// [genderPublicity] 性别可见性
+  ///
+  /// [addressPublicity] 地址可见性
+  ///
+  /// [birthYearPublicity] 生日年可见性
+  ///
+  /// [birthDayPublicity] 生日月日可见性
+  ///
+  /// [jobPublicity] 工作可见性
+
+  Future<String> postProfileEdit({
+    required bool deleteProfileImage,
+    required Uint8List? profileImage,
+    required String userName,
+    required String webpage,
+    required String twitter,
+    required Gender gender,
+    required int addressId,
+    required String countryCode,
+    required String birthday,
+    required int jobId,
+    required String comment,
+    required Publicity genderPublicity,
+    required Publicity addressPublicity,
+    required Publicity birthYearPublicity,
+    required Publicity birthDayPublicity,
+    required Publicity jobPublicity,
+  }) {
+    final formData = FormData.fromMap(
+      {
+        'delete_profile_image': deleteProfileImage,
+        'user_name': userName,
+        'webpage': webpage,
+        'twitter': twitter,
+        'gender': gender.toPixivStringParameter(),
+        'address': addressId,
+        'country': countryCode,
+        'birthday': birthday,
+        'job': jobId,
+        'comment': comment,
+        'gender_publicity': genderPublicity.toPixivStringParameter(),
+        'address_publicity': addressPublicity.toPixivStringParameter(),
+        'birth_year_publicity': birthYearPublicity.toPixivStringParameter(),
+        'birth_day_publicity': birthDayPublicity.toPixivStringParameter(),
+        'job_publicity': jobPublicity.toPixivStringParameter(),
+      },
+    );
+    if (null != profileImage) {
+      formData..files.add(MapEntry('profile_image', MultipartFile.fromBytes(profileImage)));
+    }
+    return _httpClient
+        .post<String>(
+      '/v1/user/profile/edit',
+      data: formData,
+    )
+        .then((response) => response.data!);
+  }
+
+  ///更新作业环境
+  Future<String> postWorkspaceEdit({
+    required UserWorkspace workspace,
+  }) {
+    return _httpClient
+        .post<String>(
+      'v1/user/workspace/edit',
+      data: FormData.fromMap(workspace.toJson()
+        ..removeWhere((key, value) => null == value)),
+    )
         .then((response) => response.data!);
   }
 }

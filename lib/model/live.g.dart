@@ -24,7 +24,7 @@ Live _$LiveFromJson(Map<String, dynamic> json) => Live(
       json['server'] as String,
       json['channel_id'] as String,
       json['is_enabled_mic_input'] as bool,
-      json['thumbnail_image_url'] as String,
+      json['thumbnail_image_url'] as String?,
       json['member_count'] as int,
       json['total_audience_count'] as int,
       json['performer_count'] as int,

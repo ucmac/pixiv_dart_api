@@ -64,9 +64,9 @@ class LiveDetailData {
   bool isEnabledGifting;
   @JsonKey(name: 'is_enabled_chat')
   bool isEnabledChat;
-  Thumbnail thumbnail;
+  Thumbnail? thumbnail;
   @JsonKey(name: 'member_count')
-  int memberCount;
+  int? memberCount;
   @JsonKey(name: 'audience_count')
   int audienceCount;
   @JsonKey(name: 'total_audience_count')

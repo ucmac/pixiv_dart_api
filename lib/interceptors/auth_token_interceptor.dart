@@ -89,7 +89,7 @@ class AuthTokenInterceptor extends QueuedInterceptorsWrapper {
         option.headers[authHeaderName] = result.accessToken;
       }).catchError((e) {
         print('刷新AuthToken失败');
-        print((e as DioError).response!.data);
+        print((e as DioError).response?.data);
         hasError = true;
       });
 

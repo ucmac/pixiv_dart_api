@@ -67,15 +67,47 @@ enum SearchSort {
   popularDesc,
 }
 
-enum SearchTarget {
+enum SearchIllustTarget {
   ///标签(部分匹配)
   partialMatchForTags,
 
   ///标签(完全匹配)
   exactMatchForTags,
 
-  ///标签&简介
+  ///标签&简介 小说没有
   titleAndCaption,
+}
+
+enum SearchNovelTarget {
+  ///标签(部分匹配)
+  partialMatchForTags,
+
+  ///标签(完全匹配)
+  exactMatchForTags,
+
+  //本文
+  text,
+
+  //关键字
+  keyword,
+}
+
+enum Publicity {
+  //公开
+  public,
+  //私人
+  private,
+  //好P友
+  mypixiv,
+}
+
+enum Gender {
+  //男
+  male,
+  //女
+  female,
+  //未选择
+  unknown,
 }
 
 extension EnumExtension on Enum {

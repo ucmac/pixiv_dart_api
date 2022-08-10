@@ -34,7 +34,7 @@ class Live {
   @JsonKey(name: 'is_enabled_mic_input')
   bool isEnabledMicInput;
   @JsonKey(name: 'thumbnail_image_url')
-  String thumbnailImageUrl;
+  String? thumbnailImageUrl;
   @JsonKey(name: 'member_count')
   int memberCount;
   @JsonKey(name: 'total_audience_count')
@@ -45,27 +45,27 @@ class Live {
   bool isMuted;
 
   Live(
-    this.id,
-    this.createAt,
-    this.owner,
-    this.performers,
-    this.name,
-    this.isSingle,
-    this.isAdult,
-    this.isR15,
-    this.isR18,
-    this.publicity,
-    this.isClosed,
-    this.mode,
-    this.server,
-    this.channelId,
-    this.isEnabledMicInput,
-    this.thumbnailImageUrl,
-    this.memberCount,
-    this.totalAudienceCount,
-    this.performerCount,
-    this.isMuted,
-  );
+      this.id,
+      this.createAt,
+      this.owner,
+      this.performers,
+      this.name,
+      this.isSingle,
+      this.isAdult,
+      this.isR15,
+      this.isR18,
+      this.publicity,
+      this.isClosed,
+      this.mode,
+      this.server,
+      this.channelId,
+      this.isEnabledMicInput,
+      this.thumbnailImageUrl,
+      this.memberCount,
+      this.totalAudienceCount,
+      this.performerCount,
+      this.isMuted,
+      );
 
   factory Live.fromJson(Map<String, dynamic> json) => _$LiveFromJson(json);
 

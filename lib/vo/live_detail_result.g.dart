@@ -48,8 +48,10 @@ LiveDetailData _$LiveDetailDataFromJson(Map<String, dynamic> json) =>
       json['is_enabled_mic_input'] as bool,
       json['is_enabled_gifting'] as bool,
       json['is_enabled_chat'] as bool,
-      Thumbnail.fromJson(json['thumbnail'] as Map<String, dynamic>),
-      json['member_count'] as int,
+      json['thumbnail'] == null
+          ? null
+          : Thumbnail.fromJson(json['thumbnail'] as Map<String, dynamic>),
+      json['member_count'] as int?,
       json['audience_count'] as int,
       json['total_audience_count'] as int,
       json['heart_count'] as int,
@@ -83,7 +85,7 @@ Map<String, dynamic> _$LiveDetailDataToJson(LiveDetailData instance) =>
       'is_enabled_mic_input': instance.isEnabledMicInput,
       'is_enabled_gifting': instance.isEnabledGifting,
       'is_enabled_chat': instance.isEnabledChat,
-      'thumbnail': instance.thumbnail.toJson(),
+      'thumbnail': instance.thumbnail?.toJson(),
       'member_count': instance.memberCount,
       'audience_count': instance.audienceCount,
       'total_audience_count': instance.totalAudienceCount,

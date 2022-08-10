@@ -42,3 +42,6 @@ initAccountAuthToken 去除codeVerifier参数
 
 ## 2.1.3
 修bug
+
+## 2.1.4
+修复LivePageResult
