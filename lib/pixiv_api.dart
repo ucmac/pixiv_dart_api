@@ -700,7 +700,7 @@ class PixivApi {
   ///[stampId] - 表情包ID <br/>
   ///[parentCommentId] - 父评论ID(用来回复)
   Future<CommentAddResult> postCommentAdd(int illustId, {
-    String comment = '',
+    String? comment ,
     int? stampId,
     int? parentCommentId,
   }) {
