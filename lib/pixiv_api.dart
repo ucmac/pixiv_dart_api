@@ -859,7 +859,7 @@ class PixivApi {
   }) {
     return _httpClient
         .post<String>(
-      '/v2/user/browser-history/illust/add',
+      '/v2/user/browsing-history/illust/add',
       data: FormData.fromMap(
         {
           'illust_ids': illustIds,
