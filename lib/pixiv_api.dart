@@ -352,6 +352,24 @@ class PixivApi {
         .then((response) => IllustPageResult.fromJson(jsonDecode(response.data!)));
   }
 
+  ///获取好P友的新插画 <br/>
+  ///[restrict] - 为ture获取公开的(public) 反之不公开(private) null(全部)
+  Future<IllustPageResult> getMyPixivNewIllustPage({
+    required Restrict? restrict,
+    required CancelToken cancelToken,
+  }) {
+    return _httpClient
+        .get<String>(
+      '/v2/illust/mypixiv',
+      queryParameters: {
+        'filter': 'for_android',
+        'restrict': null == restrict ? 'all' : restrict.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
+        .then((response) => IllustPageResult.fromJson(jsonDecode(response.data!)));
+  }
+
   ///获取关注者的新小说 <br/>
   ///[restrict] - 为ture获取公开的(public) 反之不公开(private) null(全部)
   Future<NovelPageResult> getFollowNewNovelPage({
@@ -361,6 +379,24 @@ class PixivApi {
     return _httpClient
         .get<String>(
       '/v1/novel/follow',
+      queryParameters: {
+        'filter': 'for_android',
+        'restrict': null == restrict ? 'all' : restrict.toPixivStringParameter(),
+      },
+      cancelToken: cancelToken,
+    )
+        .then((response) => NovelPageResult.fromJson(jsonDecode(response.data!)));
+  }
+
+  ///获取好P友的新小说 <br/>
+  ///[restrict] - 为ture获取公开的(public) 反之不公开(private) null(全部)
+  Future<NovelPageResult> getMyPixivNewNovelPage({
+    required Restrict? restrict,
+    required CancelToken cancelToken,
+  }) {
+    return _httpClient
+        .get<String>(
+      '/v1/novel/mypixiv',
       queryParameters: {
         'filter': 'for_android',
         'restrict': null == restrict ? 'all' : restrict.toPixivStringParameter(),
@@ -862,7 +898,7 @@ class PixivApi {
       '/v2/user/browsing-history/illust/add',
       data: FormData.fromMap(
         {
-          'illust_ids': illustIds,
+          'illust_ids[]': illustIds,
         },
       ),
     )
