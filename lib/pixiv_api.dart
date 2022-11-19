@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:pixiv_dart_api/vo/bookmark_detail_result.dart';
 import 'package:pixiv_dart_api/vo/live_detail_result.dart';
 import 'package:pixiv_dart_api/vo/live_page_result.dart';
 
@@ -128,7 +129,8 @@ class PixivApi {
     required CancelToken cancelToken,
   }) {
     return _httpClient
-        .get<String>('https://210.140.170.179/api/lives/$id.json', cancelToken: cancelToken, options: Options(headers: {'Host': 'sketch.pixiv.net'}))
+        .get<String>('https://210.140.170.179/api/lives/$id.json',
+            cancelToken: cancelToken, options: Options(headers: {'Host': 'sketch.pixiv.net'}))
         .then((response) => LiveDetailResult.fromJson(jsonDecode(response.data!)));
   }
 
@@ -382,7 +384,6 @@ class PixivApi {
   }
 
   ///获取好P友的新插画 <br/>
-  ///[restrict] - 为ture获取公开的(public) 反之不公开(private) null(全部)
   Future<IllustPageResult> getMyPixivNewIllustPage({
     required CancelToken cancelToken,
   }) {
@@ -416,7 +417,6 @@ class PixivApi {
   }
 
   ///获取好P友的新小说 <br/>
-  ///[restrict] - 为ture获取公开的(public) 反之不公开(private) null(全部)
   Future<NovelPageResult> getMyPixivNewNovelPage({
     required CancelToken cancelToken,
   }) {
@@ -506,7 +506,7 @@ class PixivApi {
   }) {
     return _httpClient
         .get<String>(
-          '/webview/v1/novel',
+          '/webview/v2/novel',
           queryParameters: {
             'id': novelId,
           },
@@ -688,6 +688,18 @@ class PixivApi {
           cancelToken: cancelToken,
         )
         .then((response) => BookmarkTagPageResult.fromJson(jsonDecode(response.data!)));
+  }
+
+  ///获取书签详细
+  Future<BookmarkDetailResult> getBookmarkDetail({
+    required CancelToken cancelToken,
+  }) {
+    return _httpClient
+        .get<String>(
+          '/v2/illust/bookmark/detail',
+          cancelToken: cancelToken,
+        )
+        .then((response) => BookmarkDetailResult.fromJson(jsonDecode(response.data!)));
   }
 
   ///收藏作品 <br/>
