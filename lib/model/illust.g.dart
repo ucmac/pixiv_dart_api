@@ -34,7 +34,7 @@ Illust _$IllustFromJson(Map<String, dynamic> json) => Illust(
       json['visible'] as bool,
       json['is_muted'] as bool,
       json['total_comments'] as int?,
-      json['is_ai_type'] as int,
+      json['illust_ai_type'] as int,
     );
 
 Map<String, dynamic> _$IllustToJson(Illust instance) => <String, dynamic>{
@@ -60,6 +60,6 @@ Map<String, dynamic> _$IllustToJson(Illust instance) => <String, dynamic>{
       'is_bookmarked': instance.isBookmarked,
       'visible': instance.visible,
       'is_muted': instance.isMuted,
-      'is_ai_type': instance.isAiType,
+      'illust_ai_type': instance.illustAiType,
       'total_comments': instance.totalComments,
     };

@@ -49,8 +49,8 @@ class Illust {
   bool visible;
   @JsonKey(name: 'is_muted')
   bool isMuted;
-  @JsonKey(name: 'is_ai_type')
-  int isAiType;
+  @JsonKey(name: 'illust_ai_type')
+  int illustAiType;
 
   ///这个字段必须在获取 "detail" 的时候才有值
   @JsonKey(name: 'total_comments')
@@ -80,14 +80,14 @@ class Illust {
     this.visible,
     this.isMuted,
     this.totalComments,
-    this.isAiType,
+    this.illustAiType,
   );
 
   bool get isR18 => tags.any((tag) => tag.name == 'R-18');
 
   bool get isUgoira => 'ugoira' == type;
 
-  bool get isAi => 0 != isAiType;
+  bool get isAi => 2 == illustAiType;
 
   factory Illust.fromJson(Map<String, dynamic> json) => _$IllustFromJson(json);
 
