@@ -43,9 +43,9 @@ class PixivAuth {
           'Accept-Language': languageGetter.call(),
           'Host': "oauth.secure.pixiv.net",
         },
-        connectTimeout: const Duration(seconds: 6000)
-        receiveTimeout: const Duration(seconds: 6000)
-        sendTimeout: const Duration(seconds: 6000)
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+        sendTimeout: const Duration(seconds: 10),
       ),
     );
 
